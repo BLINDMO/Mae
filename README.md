@@ -45,15 +45,21 @@ npm run dev      # open the printed URL on your computer or phone (same Wi-Fi)
 
 ## 📲 Put it on your phone (free hosting)
 
-A PWA needs to be served over HTTPS to install. Easiest free options:
+This repo publishes via **classic GitHub Pages** from the prebuilt `docs/`
+folder (no GitHub Actions needed):
 
-1. **GitHub Pages (automatic).** This repo includes a workflow at
-   `.github/workflows/deploy.yml`. In your repo go to
-   **Settings → Pages → Build and deployment → Source: GitHub Actions**. Every
-   push builds and publishes the app. Open the published URL on your phone and
-   tap **Share → Add to Home Screen**.
-2. **Netlify / Vercel / Cloudflare Pages.** Connect the repo (build command
-   `npm run build`, output dir `dist`) — all have free tiers.
+1. In the repo: **Settings → Pages → Build and deployment → Source:
+   Deploy from a branch**.
+2. Set **Branch: `main`** and **Folder: `/docs`**, then **Save**.
+3. After ~1 minute the app is live at **https://blindmo.github.io/Mae/** — open
+   it on your phone and tap **Share → Add to Home Screen**.
+
+To publish updates, rebuild and refresh the folder:
+
+```bash
+npm run build && rm -rf docs && cp -r dist docs && touch docs/.nojekyll
+git add docs && git commit -m "Update site" && git push
+```
 
 ## 🔒 Where is my data?
 
