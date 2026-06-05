@@ -35,6 +35,11 @@ export async function saveDay(day) {
   await db.put('days', { ...day, updatedAt: Date.now() })
   return day
 }
+export async function getAllDays() {
+  const db = await dbReady
+  const all = await db.getAll('days')
+  return all.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
+}
 
 /* ---------- Photos ---------- */
 export async function addPhoto({ blob, date, category, caption = '' }) {

@@ -2,48 +2,48 @@ import { useRef, useState } from 'react'
 import { exportAll, importAll } from '../db.js'
 import { getPasscode, setPasscode } from './Lock.jsx'
 import { useToast } from '../ui.jsx'
+import Icon from '../Icon.jsx'
 
-function Row({ ico, title, sub, onClick, danger }) {
+function Row({ icon, title, sub, onClick, danger }) {
   return (
-    <div className="settings-row" onClick={onClick} style={{ cursor: 'pointer' }}>
-      <div className="sr-ico">{ico}</div>
-      <div className="sr-body">
-        <div className="sr-title" style={danger ? { color: 'var(--red)' } : null}>{title}</div>
-        <div className="sr-sub">{sub}</div>
+    <button className="set-row" onClick={onClick} style={{ width: '100%', textAlign: 'left' }}>
+      <div className="si" style={danger ? { color: 'var(--neg)' } : null}><Icon name={icon} size={20} /></div>
+      <div className="sb">
+        <div className="st" style={danger ? { color: 'var(--neg)' } : null}>{title}</div>
+        <div className="ss">{sub}</div>
       </div>
-      <div style={{ color: 'var(--ink-soft)' }}>›</div>
-    </div>
+      <div className="chev"><Icon name="right" size={18} /></div>
+    </button>
   )
 }
 
-// Minimal 4-digit keypad for setting a new passcode.
 function MiniPad({ title, onComplete, onCancel }) {
   const [entry, setEntry] = useState('')
   function press(n) {
     if (entry.length >= 4) return
     const next = entry + n
     setEntry(next)
-    if (next.length === 4) setTimeout(() => { onComplete(next); setEntry('') }, 120)
+    if (next.length === 4) setTimeout(() => { onComplete(next); setEntry('') }, 110)
   }
   return (
     <div className="lock">
-      <h2 style={{ marginBottom: 4 }}>{title}</h2>
+      <h2 style={{ marginBottom: 6 }}>{title}</h2>
       <div className="dots">{[0, 1, 2, 3].map((i) => <div key={i} className={'dot' + (i < entry.length ? ' on' : '')} />)}</div>
       <div className="keypad">
-        {['1', '2', '3', '4', '5', '6', '7', '8', '9', 'c', '0', 'del'].map((k) => {
-          if (k === 'c') return <button key="c" className="key fn" onClick={onCancel}>Cancel</button>
-          if (k === 'del') return <button key="del" className="key fn" onClick={() => setEntry(entry.slice(0, -1))}>⌫</button>
-          return <button key={k} className="key" onClick={() => press(k)}>{k}</button>
+        {['1', '2', '3', '4', '5', '6', '7', '8', '9', 'c', '0', 'del'].map((k, i) => {
+          if (k === 'c') return <button key={i} className="key fn" onClick={onCancel}>Cancel</button>
+          if (k === 'del') return <button key={i} className="key fn" onClick={() => setEntry(entry.slice(0, -1))}><Icon name="left" size={22} /></button>
+          return <button key={i} className="key" onClick={() => press(k)}>{k}</button>
         })}
       </div>
     </div>
   )
 }
 
-export default function Settings({ onLock }) {
+export default function Settings({ onLock, go }) {
   const toast = useToast()
   const fileRef = useRef(null)
-  const [pad, setPad] = useState(null) // 'new' | 'confirm'
+  const [pad, setPad] = useState(null)
   const [firstCode, setFirstCode] = useState('')
 
   async function doExport() {
@@ -52,12 +52,11 @@ export default function Settings({ onLock }) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `honeycutts-backup-${new Date().toISOString().slice(0, 10)}.json`
+    a.download = `honeycutt-time-capsule-backup-${new Date().toISOString().slice(0, 10)}.json`
     a.click()
     URL.revokeObjectURL(url)
-    toast('Backup downloaded ✓')
+    toast('Backup downloaded')
   }
-
   async function onImportFile(e) {
     const file = e.target.files?.[0]
     e.target.value = ''
@@ -66,48 +65,48 @@ export default function Settings({ onLock }) {
     try {
       const data = JSON.parse(await file.text())
       await importAll(data)
-      toast('Backup restored ✓')
+      toast('Backup restored')
       setTimeout(() => location.reload(), 900)
     } catch { alert('That file could not be restored.') }
   }
-
   function onPad(code) {
     if (pad === 'new') { setFirstCode(code); setPad('confirm') }
     else {
-      if (code === firstCode) { setPasscode(code); setPad(null); toast('Passcode updated ✓') }
+      if (code === firstCode) { setPasscode(code); setPad(null); toast('Passcode updated') }
       else { toast('Codes didn’t match — try again'); setPad('new'); setFirstCode('') }
     }
   }
 
   if (pad) {
-    return (
-      <MiniPad
-        title={pad === 'new' ? 'Enter a new 4-digit passcode' : 'Confirm new passcode'}
-        onComplete={onPad}
-        onCancel={() => { setPad(null); setFirstCode('') }}
-      />
-    )
+    return <MiniPad title={pad === 'new' ? 'Enter a new passcode' : 'Confirm new passcode'} onComplete={onPad} onCancel={() => { setPad(null); setFirstCode('') }} />
   }
 
   return (
-    <div className="scroll screen-enter">
-      <div className="section-title">Security</div>
-      <Row ico="🔑" title="Change passcode" sub={`Current default is ${getPasscode() === '6620' ? '6620' : 'set by you'}`} onClick={() => { setFirstCode(''); setPad('new') }} />
-      <Row ico="🔒" title="Lock now" sub="Return to the passcode screen" onClick={onLock} />
+    <>
+      <div className="topbar">
+        <button className="tb-btn" onClick={() => go('home')} aria-label="Back"><Icon name="left" size={20} /></button>
+        <div className="tb-title"><h1>Settings</h1></div>
+      </div>
 
-      <div className="section-title">Your memories</div>
-      <Row ico="💾" title="Back up everything" sub="Save a file with all entries & photos" onClick={doExport} />
-      <Row ico="♻️" title="Restore from backup" sub="Replace data from a backup file" onClick={() => fileRef.current?.click()} />
-      <input ref={fileRef} type="file" accept="application/json" hidden onChange={onImportFile} />
+      <div className="screen screen-enter">
+        <div className="section-label">Security</div>
+        <Row icon="lock" title="Change passcode" sub="Update your 4-digit code" onClick={() => { setFirstCode(''); setPad('new') }} />
+        <Row icon="shield" title="Lock now" sub="Return to the passcode screen" onClick={onLock} />
 
-      <div className="section-title">About</div>
-      <div className="settings-row">
-        <div className="sr-ico">⏳</div>
-        <div className="sr-body">
-          <div className="sr-title">The Honeycutt Time Capsule</div>
-          <div className="sr-sub">Everything is stored privately on this device. Add to your Home Screen for the full app feel — and back up now and then so the memories are always safe.</div>
+        <div className="section-label">Your memories</div>
+        <Row icon="download" title="Back up everything" sub="Save a file with all entries & photos" onClick={doExport} />
+        <Row icon="restore" title="Restore from backup" sub="Replace data from a backup file" onClick={() => fileRef.current?.click()} />
+        <input ref={fileRef} type="file" accept="application/json" hidden onChange={onImportFile} />
+
+        <div className="section-label">About</div>
+        <div className="set-row">
+          <div className="si"><Icon name="shield" size={20} /></div>
+          <div className="sb">
+            <div className="st">The Honeycutt Time Capsule</div>
+            <div className="ss">Everything is stored privately on this device. Add to your Home Screen for the full app feel — and back up now and then so the memories are always safe.</div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
