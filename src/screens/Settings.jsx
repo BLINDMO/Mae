@@ -1,15 +1,17 @@
 import { useRef, useState } from 'react'
 import { exportAll, importAll } from '../db.js'
 import { getPasscode, setPasscode } from './Lock.jsx'
+import { FONTS, getFontId, applyFont } from '../fonts.js'
 import { useToast } from '../ui.jsx'
 import Icon from '../Icon.jsx'
 
-function Row({ icon, title, sub, onClick, danger }) {
+function Row({ icon, color = 'amber', title, sub, onClick, danger }) {
+  const tint = danger ? { background: 'var(--red-bg)', color: 'var(--red)' } : { background: `var(--${color}-bg)`, color: `var(--${color})` }
   return (
-    <button className="set-row" onClick={onClick} style={{ width: '100%', textAlign: 'left' }}>
-      <div className="si" style={danger ? { color: 'var(--neg)' } : null}><Icon name={icon} size={20} /></div>
+    <button className="set-row" onClick={onClick}>
+      <div className="si" style={tint}><Icon name={icon} size={20} /></div>
       <div className="sb">
-        <div className="st" style={danger ? { color: 'var(--neg)' } : null}>{title}</div>
+        <div className="st" style={danger ? { color: 'var(--red)' } : null}>{title}</div>
         <div className="ss">{sub}</div>
       </div>
       <div className="chev"><Icon name="right" size={18} /></div>
@@ -45,6 +47,7 @@ export default function Settings({ onLock, go }) {
   const fileRef = useRef(null)
   const [pad, setPad] = useState(null)
   const [firstCode, setFirstCode] = useState('')
+  const [font, setFont] = useState(getFontId())
 
   async function doExport() {
     const data = await exportAll()
@@ -76,6 +79,7 @@ export default function Settings({ onLock, go }) {
       else { toast('Codes didn’t match — try again'); setPad('new'); setFirstCode('') }
     }
   }
+  function pickFont(id) { setFont(applyFont(id)) }
 
   if (pad) {
     return <MiniPad title={pad === 'new' ? 'Enter a new passcode' : 'Confirm new passcode'} onComplete={onPad} onCancel={() => { setPad(null); setFirstCode('') }} />
@@ -89,18 +93,30 @@ export default function Settings({ onLock, go }) {
       </div>
 
       <div className="screen screen-enter">
+        <div className="section-label">Appearance · Font</div>
+        <div className="font-grid">
+          {FONTS.map((f) => (
+            <button key={f.id} className={'font-card' + (font === f.id ? ' sel' : '')} onClick={() => pickFont(f.id)}>
+              <span className="fdot">{font === f.id && <Icon name="check" size={11} stroke={3} />}</span>
+              <div className="fp" style={{ fontFamily: f.stack }}>Ag</div>
+              <div className="fl" style={{ fontFamily: f.stack }}>{f.label}</div>
+              <div className="fn2">{f.note}</div>
+            </button>
+          ))}
+        </div>
+
         <div className="section-label">Security</div>
-        <Row icon="lock" title="Change passcode" sub="Update your 4-digit code" onClick={() => { setFirstCode(''); setPad('new') }} />
-        <Row icon="shield" title="Lock now" sub="Return to the passcode screen" onClick={onLock} />
+        <Row icon="lock" color="sky" title="Change passcode" sub="Update your 4-digit code" onClick={() => { setFirstCode(''); setPad('new') }} />
+        <Row icon="shield" color="violet" title="Lock now" sub="Return to the passcode screen" onClick={onLock} />
 
         <div className="section-label">Your memories</div>
-        <Row icon="download" title="Back up everything" sub="Save a file with all entries & photos" onClick={doExport} />
-        <Row icon="restore" title="Restore from backup" sub="Replace data from a backup file" onClick={() => fileRef.current?.click()} />
+        <Row icon="download" color="teal" title="Back up everything" sub="Save a file with all entries & photos" onClick={doExport} />
+        <Row icon="restore" color="coral" title="Restore from backup" sub="Replace data from a backup file" onClick={() => fileRef.current?.click()} />
         <input ref={fileRef} type="file" accept="application/json" hidden onChange={onImportFile} />
 
         <div className="section-label">About</div>
         <div className="set-row">
-          <div className="si"><Icon name="shield" size={20} /></div>
+          <div className="si" style={{ background: 'var(--amber-bg)', color: 'var(--gold)' }}><Icon name="shield" size={20} /></div>
           <div className="sb">
             <div className="st">The Honeycutt Time Capsule</div>
             <div className="ss">Everything is stored privately on this device. Add to your Home Screen for the full app feel — and back up now and then so the memories are always safe.</div>

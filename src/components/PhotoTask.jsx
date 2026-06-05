@@ -5,7 +5,7 @@ import { usePhotoUrl } from '../hooks.js'
 import Icon from '../Icon.jsx'
 
 // One face-photo-per-day task (daughter or dad) shown on the Today screen.
-export default function PhotoTask({ title, sub, photoId, date, category, onChange }) {
+export default function PhotoTask({ title, sub, photoId, date, category, accent = '', onChange }) {
   const inputRef = useRef(null)
   const [busy, setBusy] = useState(false)
   const url = usePhotoUrl(photoId)
@@ -31,7 +31,7 @@ export default function PhotoTask({ title, sub, photoId, date, category, onChang
   return (
     <div className="card">
       <div className="row">
-        <div className="photo-frame" onClick={() => inputRef.current?.click()}>
+        <div className={'photo-frame' + (url ? '' : ' ' + accent)} onClick={() => inputRef.current?.click()}>
           {url ? <img src={url} alt={title} /> : <Icon name="camera" size={26} />}
         </div>
         <div style={{ flex: 1 }}>

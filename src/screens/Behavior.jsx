@@ -81,8 +81,14 @@ export default function Behavior() {
         </div>
 
         <div className="tally">
-          <div className="t pos"><span className="dot2" /><div><div className="n">{totals.pos}</div><div className="k">positive</div></div></div>
-          <div className="t neg"><span className="dot2" /><div><div className="n">{totals.neg}</div><div className="k">negative</div></div></div>
+          <div className="t pos">
+            <div className="tf"><Icon name="smile" size={20} /></div>
+            <div><div className="tn">{totals.pos}</div><div className="tk">positive this month</div></div>
+          </div>
+          <div className="t neg">
+            <div className="tf"><Icon name="smile" size={20} style={{ transform: 'scaleY(-1)' }} /></div>
+            <div><div className="tn">{totals.neg}</div><div className="tk">negative this month</div></div>
+          </div>
         </div>
 
         <div className="cal">
