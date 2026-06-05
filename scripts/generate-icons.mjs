@@ -1,5 +1,5 @@
 // Generates the PWA icons + splash image from the brand artwork
-// (brand/logo-source.png, 1024x1024 with the title text baked into the lower
+// (brand/logo-source.jpg, 1024x1024 with the title text baked into the lower
 // portion). We crop the capsule itself (no text) for the square app icons, and
 // emit a compressed full-artwork splash image. The high-res source lives
 // outside public/ so it isn't shipped to users.
@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const src = join(root, 'brand', 'logo-source.png')
+const src = join(root, 'brand', 'logo-source.jpg')
 const out = (f) => join(root, 'public', f)
 
 // Square region containing just the time-capsule (excludes the title text).
