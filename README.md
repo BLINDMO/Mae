@@ -1,5 +1,8 @@
 # The Honeycutt Time Capsule ⏳
 
+**Live app:** https://blindmo.github.io/Mae/ — open on your phone and tap
+*Share → Add to Home Screen*.
+
 A private daily journal & family time capsule — a place to seal away what your
 days are like for your daughter (and yourself) to look back on as she grows up.
 
