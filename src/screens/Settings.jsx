@@ -102,9 +102,9 @@ export default function Settings({ onLock }) {
 
       <div className="section-title">About</div>
       <div className="settings-row">
-        <div className="sr-ico">🍯</div>
+        <div className="sr-ico">⏳</div>
         <div className="sr-body">
-          <div className="sr-title">History of Honeycutt's</div>
+          <div className="sr-title">The Honeycutt Time Capsule</div>
           <div className="sr-sub">Everything is stored privately on this device. Add to your Home Screen for the full app feel — and back up now and then so the memories are always safe.</div>
         </div>
       </div>

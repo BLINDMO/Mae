@@ -46,10 +46,10 @@ export default function App() {
     <ToastProvider>
       <div className="app">
         <div className="app-header">
-          <img className="logo-sm" src="logo.svg" alt="" />
+          <img className="logo-sm" src="logo.png" alt="" />
           <div className="title">
-            <h1>History of Honeycutt's</h1>
-            <span>Our family story, one day at a time</span>
+            <h1>The Honeycutt Time Capsule</h1>
+            <span>Sealing our days, one at a time</span>
           </div>
           <button className="icon-btn" onClick={() => go('settings')} aria-label="Settings">⚙️</button>
         </div>

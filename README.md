@@ -1,6 +1,6 @@
-# History of Honeycutt's 🍯
+# The Honeycutt Time Capsule ⏳
 
-A loving daily journal & family tracker — a private place to record what your
+A private daily journal & family time capsule — a place to seal away what your
 days are like for your daughter (and yourself) to look back on as she grows up.
 
 Built as an **installable web app (PWA)**: open it in your phone's browser and
@@ -10,8 +10,7 @@ Built as an **installable web app (PWA)**: open it in your phone's browser and
 ## ✨ Features
 
 - **Passcode lock** — default `6620` (changeable in Settings).
-- **Beautiful splash screen** & a family logo (dad, mom, son, daughter, and your
-  brown pit bull).
+- **Beautiful dark splash screen** featuring the ornate Honeycutt time-capsule.
 - **Today screen** with the day's tasks:
   1. ⭐ Rate the day 1–5 stars (5 stars throws a little confetti).
   2. 👧 A daily photo of your daughter's face — watch her grow.
@@ -62,4 +61,5 @@ everything** periodically and keep the backup file somewhere safe.
 ## 🛠 Tech
 
 React + Vite, `idb` for local storage, `vite-plugin-pwa` for offline/installable
-support. Icons are generated from `public/logo.svg` via `npm run icons`.
+support. App icons are generated from the artwork in `public/logo-full.png`
+(cropped to the capsule) via `npm run icons`.

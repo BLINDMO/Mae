@@ -1,9 +1,8 @@
 export default function Splash() {
   return (
     <div className="splash">
-      <img className="badge" src="logo.svg" alt="The Honeycutt family" />
-      <h1>History of<br />Honeycutt's</h1>
-      <div className="tag">Every day is part of our story 🍯</div>
+      <img className="badge" src="splash.jpg" alt="The Honeycutt Time Capsule" />
+      <div className="tag">Sealing today’s memories ✨</div>
       <div className="loader" />
     </div>
   )

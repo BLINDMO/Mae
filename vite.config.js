@@ -2,20 +2,20 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// History of Honeycutt's — installable PWA, all data stored locally on device.
+// The Honeycutt Time Capsule — installable PWA, all data stored locally on device.
 export default defineConfig({
   base: './',
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.png', 'apple-touch-icon.png'],
       manifest: {
-        name: "History of Honeycutt's",
-        short_name: 'Honeycutts',
-        description: "A loving daily journal & family tracker for the Honeycutt family.",
-        theme_color: '#E8A317',
-        background_color: '#2B1E12',
+        name: 'The Honeycutt Time Capsule',
+        short_name: 'Time Capsule',
+        description: 'A private daily journal & family time capsule for the Honeycutts.',
+        theme_color: '#15151a',
+        background_color: '#15151a',
         display: 'standalone',
         orientation: 'portrait',
         start_url: './',

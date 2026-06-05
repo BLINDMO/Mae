@@ -34,8 +34,8 @@ export default function Lock({ onUnlock, prompt = 'Enter your passcode', onMatch
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'fn', '0', 'del']
   return (
     <div className={'lock' + (shake ? ' shake' : '')}>
-      <img className="badge" src="logo.svg" alt="" />
-      <h2>History of Honeycutt's</h2>
+      <img className="badge" src="logo.png" alt="" />
+      <h2>The Honeycutt Time Capsule</h2>
       <p>{prompt}</p>
       <div className="dots">
         {[0, 1, 2, 3].map((i) => <div key={i} className={'dot' + (i < entry.length ? ' on' : '')} />)}

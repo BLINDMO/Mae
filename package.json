@@ -1,9 +1,9 @@
 {
-  "name": "history-of-honeycutts",
+  "name": "honeycutt-time-capsule",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "A loving daily journal & family tracker for the Honeycutt family.",
+  "description": "The Honeycutt Time Capsule — a private daily journal & family time capsule.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
