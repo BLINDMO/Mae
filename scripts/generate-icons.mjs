@@ -1,8 +1,7 @@
 // Generates the PWA icons + splash image from the brand artwork
-// (brand/logo-source.jpg, 1024x1024 with the title text baked into the lower
-// portion). We crop the capsule itself (no text) for the square app icons, and
-// emit a compressed full-artwork splash image. The high-res source lives
-// outside public/ so it isn't shipped to users.
+// (brand/logo-source.jpg, the finished 1024x1024 logo). The artwork is used
+// as-is (no cropping) so every icon matches the supplied design. The high-res
+// source lives outside public/ so the original isn't shipped to users.
 import sharp from 'sharp'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
@@ -10,9 +9,6 @@ import { dirname, join } from 'node:path'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const src = join(root, 'brand', 'logo-source.jpg')
 const out = (f) => join(root, 'public', f)
-
-// Square region containing just the time-capsule (excludes the title text).
-const CROP = { left: 200, top: 70, width: 624, height: 624 }
 
 const icons = [
   { file: 'logo.png', size: 256 },
@@ -23,10 +19,10 @@ const icons = [
 ]
 
 for (const { file, size } of icons) {
-  await sharp(src).extract(CROP).resize(size, size).png().toFile(out(file))
+  await sharp(src).resize(size, size).png().toFile(out(file))
   console.log('wrote public/' + file)
 }
 
-// Full artwork (with title) for the splash screen — compressed JPEG.
-await sharp(src).resize(768, 768).jpeg({ quality: 84, mozjpeg: true }).toFile(out('splash.jpg'))
+// Full artwork for the splash screen — compressed JPEG.
+await sharp(src).resize(768, 768).jpeg({ quality: 86, mozjpeg: true }).toFile(out('splash.jpg'))
 console.log('wrote public/splash.jpg')
